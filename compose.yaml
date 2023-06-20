@@ -1,0 +1,27 @@
+services:
+  revel:
+    build:
+      context: ./revel/
+      dockerfile: Dockerfile
+    tty: true
+    volumes:
+      - "./revel:/var/www/revel"
+    ports:
+      - 9000:9000
+    links:
+      - mysql
+    depends_on:
+      - mysql
+
+  mysql:
+    build:
+      context: ./mysql/
+      dockerfile: Dockerfile
+    restart: always
+    hostname: mysql
+    env_file:
+      - ./mysql/env
+    ports:
+      - 3306:3306
+    volumes:
+      - "./mysql/data:/var/lib/mysql"
